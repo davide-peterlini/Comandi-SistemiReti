@@ -1,0 +1,6 @@
+Configurazione switch base:
+    
+    Configurare nome sw:
+        - ena
+        - conf t
+        - hostname A#-SW#
