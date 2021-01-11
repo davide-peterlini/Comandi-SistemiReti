@@ -4,3 +4,9 @@ Configurazione switch base:
         - ena
         - conf t
         - hostname A#-SW#
+
+    Configurare Password
+        - line console 0
+        - password cisco
+        - login
+        - end
