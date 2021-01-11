@@ -1,5 +1,5 @@
 Configurazione switch base:
-    
+
     Configurare nome SW:
         - ena
         - conf t
@@ -28,3 +28,19 @@ Configurazione switch base:
         - ip address 172.16.1.254 255.255.255.0
      	- no shutdown 
         - exit
+
+
+-----------------------------------------------------------------------
+
+
+SSH:
+    - service password-encryption
+    - no ip domain-lookup
+    - ip domain-name CCNA.com
+    - username Davide secret cisco
+    - crypto key generate rsa
+    - login block-for 180 attempts 4 within 120
+    - exec-timeout 6
+    - line vty 0 15
+    - transport input ssh
+    - login local
