@@ -17,3 +17,7 @@ Configurazione switch base:
         - end
         - show running-config
 
+    Banner Messages:
+        - conf t
+        - banner motd 'Authorized Access Only'
+        - end
