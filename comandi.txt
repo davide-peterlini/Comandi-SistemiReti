@@ -21,3 +21,10 @@ Configurazione switch base:
         - conf t
         - banner motd 'Authorized Access Only'
         - end
+    
+    Configurazione IP:
+        - configure terminal
+        - interface vlan 1
+        - ip address 172.16.1.254 255.255.255.0
+     	- no shutdown 
+        - exit
