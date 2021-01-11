@@ -1,12 +1,19 @@
 Configurazione switch base:
     
-    Configurare nome sw:
+    Configurare nome SW:
         - ena
         - conf t
         - hostname A#-SW#
 
-    Configurare Password
+    Configurare Password:
         - line console 0
         - password cisco
         - login
         - end
+
+    Criptaggio Password:
+        - configure terminal
+        - service password-encryption
+        - end
+        - show running-config
+
