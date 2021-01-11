@@ -60,3 +60,21 @@ EtherChannel:
         passive    Enable LACP only if a LACP device is detected
     - channel-group 1 mode active
     - show etherchannel summary
+
+
+-----------------------------------------------------------------------
+
+
+VLAN:
+    - vlan 10
+    - name Gialla
+    - exit
+    - vlan 20
+    - name Azzurra
+    - exit
+    - interface range fastEthernet 0/1 -12
+    - switchport access vlan 10
+    - interface range fastEthernet 0/13-24
+    - switchport access vlan 20
+    - exit
+    - do sho vlan
