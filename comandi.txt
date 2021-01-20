@@ -39,11 +39,23 @@ SSH:
     - ip domain-name CCNA.com
     - username Davide secret cisco
     - crypto key generate rsa
-    - login block-for 180 attempts 4 within 120
-    - exec-timeout 6
     - line vty 0 15
     - transport input ssh
     - login local
+    - exec-timeout 6
+
+    //- login block-for 180 attempts 4 within 120
+
+
+-----------------------------------------------------------------------
+
+
+Telnet:
+    - conf t
+    - line vty 0 15
+    - transport input telnet
+    - password cisco
+    - login
 
 
 -----------------------------------------------------------------------
