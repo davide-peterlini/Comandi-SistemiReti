@@ -90,3 +90,18 @@
         - switchport access vlan 20
         - exit
         - do sho vlan
+        
+
+-----------------------------------------------------------------------
+
+
+    DHCP:
+        - ip dhcp excluded-address 172.16.1.1 172.16.1.3
+        - ip dhcp pool DATA
+        - network 172.16.1.0 255.255.255.0
+        - default-router 172.16.1.1
+        - dns-server 172.16.1.1 172.16.1.21
+        - lease day|infinite
+
+
+-----------------------------------------------------------------------
