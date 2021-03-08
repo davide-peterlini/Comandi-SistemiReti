@@ -105,3 +105,26 @@
 
 
 -----------------------------------------------------------------------
+
+
+    DHCP with SL3 & DHCP SERVER:
+        
+        Conf Interface Port:
+            - interface GigabitEthernet1/1/1
+            - switchport trunk encapsulation dot1q
+            - switchport mode trunk
+        
+        Conf Interface Vlan:
+            - interface vlan "nVlan"
+            - ip address "ipvlan" 255.255.255.0
+            - ip helper-address "ip dhcp server"
+            - no shutdown
+
+        Conf Gataway DHCP Server:
+            - interface GigabitEthernet1/0/3
+            - switchport access vlan "nVlan"
+            - switchport mode access
+
+            - interface vlan "nVlan"
+            - ip address "dhcp server gataway" 255.255.255.0
+            - no shutdown
