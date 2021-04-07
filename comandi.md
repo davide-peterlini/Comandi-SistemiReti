@@ -114,6 +114,9 @@
             - switchport trunk encapsulation dot1q
             - switchport mode trunk
         
+        Create Vlan:
+            - vlan "nVlan"
+
         Conf Interface Vlan:
             - interface vlan "nVlan"
             - ip address "ipvlan" 255.255.255.0
@@ -121,10 +124,26 @@
             - no shutdown
 
         Conf Gataway DHCP Server:
+            - create vlan "nVlan"
+            - interface vlan "nVlan"
+            - ip address "dhcp server gataway" 255.255.255.0
+            - no shutdown
+
             - interface GigabitEthernet1/0/3
             - switchport access vlan "nVlan"
             - switchport mode access
 
-            - interface vlan "nVlan"
-            - ip address "dhcp server gataway" 255.255.255.0
-            - no shutdown
+
+-----------------------------------------------------------------------
+
+
+    Router On a STICK (First Create VLAN):
+        - interface GigabitEthernet0/0
+        - no ip address
+
+        - interface GigabitEthernet0/0."nVlan"
+        - encapsulation dot1Q "nVlan"
+        - ip address 172.16."nVlan".254 255.255.255.0
+
+
+-----------------------------------------------------------------------
