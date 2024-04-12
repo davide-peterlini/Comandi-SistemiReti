@@ -1,0 +1,173 @@
+						NAT
+default route con next hop il primo indirizzo che trovo nella parte 
+di nat outside, così butta tutto fuori.
+
+
+
+NAT Statico
+
+-enable
+-configure terminal
+    -ip nat inside source static 10.0.0.2 50.0.0.1		faccio per ogni pc delal rete
+    -interface g 0/0           (interfaccia dove ho collegati i dispositivi da nattare)
+        -ip nat inside
+        -exit
+    -interface g 0/1        (interfaccia dove ho collegato il resto della rete, dove deve uscire l'indirizzo pubblico)
+        -ip nat outside
+        -end
+-wr
+
+
+NAT Dinamico
+
+-enable
+-configure terminal
+    -access-list 1 permit 192.168.0.0 0.0.0.255      CI FA CREARE UNA LISTA CON NUMERO 1 E CI PERMETTE DI USCIRE, SI USA INDIRIZZO DI RETE E WILDCARD
+    -ip nat pool test 50.0.0.1 50.0.0.5 netmask 255.0.0.0     SI CREA UNA POOL CON UN RANGE DI INDIRIZZI E LA MASCHERA DI RETE DI QUESTI INDIRIZZI
+    -ip nat inside source list 1 pool test
+    -interface g 0/0
+        -ip nat inside
+        -exit
+    -interface g 0/1
+        -ip nat outside
+        -end
+-wr
+
+
+PAT
+
+-enable
+-configure terminal
+    -access-list 1 permit 192.168.0.0 0.0.0.255      CI FA CREARE UNA LISTA CON NUMERO 1 E CI PERMETTE DI USCIRE, SI USA INDIRIZZO DI RETE E WILDCARD
+    -ip nat pool test 50.0.0.1 50.0.0.1 netmask 255.0.0.0     SI CREA UNA POOL CON UN RANGE DI INDIRIZZI E LA MASCHERA DI RETE DI QUESTI INDIRIZZI
+    -ip nat inside source list 1 pool test overload     OVERLOAD MI DEFINISCE QUELLO CHE ABBIAMO CHIAMATO PAT
+    -interface g 0/0
+        -ip nat inside
+        -exit
+    -interface g 0/1
+        -ip nat outside
+        -end
+-wr
+
+X Longano
+-enable
+-configure terminal
+
+	-assegno l'ip pubblico direttamente alla porta
+	-ip nat outside
+
+	-ip nat inside(per la porta con l'ip privato)
+
+	-access-list 1 permit <indirizzo di rete(della mia rete privata)> <wildcard della maschera>
+	-ip nat inside source list 1 interface <Interfaccia con ip pubblico> overload
+
+
+
+
+					ROTTE STATICHE/DI DEFAULT
+
+
+CONFIGURARE LE ROTTE STATICHE NEI ROUTER
+-ip route <indirizzo di rete di destinazione> <subnet mask> <next hop, il prossimo dispositivo che trovo>
+-show ip route static --> vedo la configurazione delle tabelle
+
+
+
+CONFIGURARE LE ROTTE DI DEFAULT NEI ROUTER
+-ip route 0.0.0.0(rete da raggiungere) 0.0.0.0(maschera deella rete da raggiungere)  <next hop>
+
+
+
+
+					RIP(v4 e v6)
+
+
+RIPv2 (ipv4)
+-en
+-conf t
+-no router ospf 1(se c'è l'ospf attivo)
+-router rip
+-version 2
+-no auto-summary
+-network + <indirizzo di rete>
+-passive-interface <porta su cui non mandare le tabelle>
+-redistribute connected
+-sh ip route
+-write
+
+
+
+RIP(ipv6)
+-en
+-conf t
+-ipv6 unicast-routing
+-ipv6 router rip <nome che ripeto in tutti>
+-exit
+-ipv6 rip <nome di prima> enable   e lo faccio su ogni interfaccia
+
+
+
+					IPV6
+
+CONFIGURARE UN ROUTER IPV6	
+-en
+-conf t
+-ipv6 unicast-routing
+-int g0/n
+-ipv6 address <indirizzo>/<cidr>
+-no sh
+
+
+IPV6
+-en
+-conf t
+-ipv6 unicast-routing
+-int <interfaccia>
+-ipv6 address <indirizzo> eui-64    per calcolarlo con l'eui64, altrimenti lo metto manualmente
+RIPng (ipv6)
+-do show ipv6 int br       per vedere gli indirizzi
+
+
+
+					DHCP
+DHCP
+-en
+-conf t
+	-ip dhcp pool <nomePool>
+	-network <indirizzo rete> <maschera>
+
+
+DHCPv6 su router
+-en
+-conf t
+	-ipv6 dhcp pool <nome>
+	-address prefix <prefisso>/64
+	-dns-server <indirizzo del dns>
+	-domain-name <nome dominio>
+	-int g0/n.x
+		-encapsulation dot1q <nVlan>
+		-ipv6 address <indirizzo>/64
+		-ipv6 nd other-config-flag                                               bit di flag che dice che il prefisso può prenderlo da questa inerfaccia ma il dns lo deve prendere da qualcun'altro, ovvero il dhcp
+		-ipv6 dhcp server <nomePool>
+		-end
+-wr
+
+		
+DHCPv6su server
+-services
+	-create pool
+		-name: Nome che voglio dare alla pool di indirizzi
+		-dns: indirizzo ip del dns + cidr(opzionale)
+		-domain name: nome del dominio, metto quello che voglio anche li
+		-save
+	-create(alla prima voce subito sotto)
+		-metto pool + cidr
+		-save
+
+
+
+
+   					DNS
+record A
+Name: nome con cui voglio chiamare il server
+address: ip del server interessato(non il DNS)
